@@ -1,0 +1,21 @@
+异常数据问题记录
+
+2007年特别国债出现在正逆回购数据集中，属于异常，需要另作处理
+
+07特别国债07,100,7500,1,2007-12-11 11:59:00
+
+07特别国债01,100,6000,0,2007-08-29 20:13:00
+
+
+操作过程
+money.operation = read.table(file="/Users/rimbaud/Downloads/正逆回购.txt",sep=",")
+colnames(money.operation)=c("periods","amount","rate","operate_type","day")
+money.operation$amount=gsub("亿元","",money.operation$amount)
+money.operation$periods=gsub("天","",money.operation$periods)
+money.operation$day=as.Date(money.operation$day,formate="%Y-%m-%d %h:%m:%s")
+require(zoo)
+
+#先转换成charcter，再替换%，最后再转换成numeric
+money.operation$rate=as.character(money.operation$rate)
+money.operation$rate=gsub("%","",money.operation$rate)
+money.operation$rate=as.numeric(money.operation$rate)
